@@ -4,7 +4,8 @@ import styled from "@emotion/styled";
 import Error from "./Error";
 import useCurrency from "../hooks/useCurrency";
 import useCryptocurrency from "../hooks/useCryptocurrency";
-import axios, { Axios } from "axios";
+import axios from "axios";
+
 
 const Button = styled.input`
     margin-top: 20px;
@@ -24,10 +25,10 @@ const Button = styled.input`
     }
 `;
 
-const Form = () => {
+const Form = ({ saveCurrency, saveCryptocurrency }) => {
 
     // State of the Crypto list
-    const [ listCrypto, saveCryptocurrency ] = useState([]);
+    const [ listCrypto, saveCryptocurrencies ] = useState([]);
     const [ error, saveError ] = useState(false);
 
     const CURRENCIES = [
@@ -38,7 +39,7 @@ const Form = () => {
     ]
 
     // Use useCurrency
-    const [currency, SelectCurrency] = useCurrency('Choose your currency', '', CURRENCIES);
+    const [currency, SelectCurrencies] = useCurrency('Choose your currency', '', CURRENCIES);
 
 
     // Use useCryptocurrency
@@ -51,7 +52,7 @@ const Form = () => {
 
             const result = await axios.get(url);
 
-            saveCryptocurrency(result.data.Data);
+            saveCryptocurrencies(result.data.Data);
         }
         consultAPI();
     }, []);
@@ -69,6 +70,8 @@ const Form = () => {
 
         // Pass data to main component
         saveError(false);
+        saveCurrency(currency);
+        saveCryptocurrency(cryptocurrency);
     }
 
     return (
@@ -77,7 +80,7 @@ const Form = () => {
         >
             {error ? <Error message="All fields are obligatory" /> : null}
 
-            <SelectCurrency />
+            <SelectCurrencies />
 
             <SelectCrypto />
 

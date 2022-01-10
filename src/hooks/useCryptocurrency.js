@@ -35,7 +35,7 @@ const useCryptocurrency = (label, initialState, options) => {
             >
                 <option value="">- Select -</option>
                 {options.map(option => (
-                    <option key={option.CoinInfo.Id} value={option.CoinInfo.name}>{option.CoinInfo.FullName}</option>
+                    <option key={option.CoinInfo.Id} value={option.CoinInfo.Name}>{option.CoinInfo.FullName}</option>
                 ))}
             </Select>
         </Fragment>

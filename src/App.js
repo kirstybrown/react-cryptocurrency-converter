@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
+import axios from "axios";
 import imagen from './cryptomonedas.png';
 import Form from './components/Form';
 
@@ -37,6 +38,27 @@ const Heading = styled.h1`
 `;
 
 function App() {
+
+  const [currency, saveCurrency] = useState('');
+  const [cryptocurrency, saveCryptocurrency] = useState('');
+
+  useEffect(() => {
+
+    const convertCryptocurrency = async () => {
+
+      // We avoid executing the first time
+      if(currency === '') return;
+
+      // Consult the API to get conversion rates
+      const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptocurrency}&tsyms=${currency}`;
+
+      const result = await axios.get(url);
+      console.log(result.data.DISPLAY[cryptocurrency][currency] );
+    }
+    convertCryptocurrency();
+
+  }, [currency, cryptocurrency]);
+
   return (
     <Contenedor>
       <div>
@@ -48,7 +70,10 @@ function App() {
       <div>
         <Heading>Convert Cryptocurrency Instantly</Heading>
 
-        <Form />
+        <Form 
+          saveCurrency={saveCurrency}
+          saveCryptocurrency={saveCryptocurrency}
+        />
       </div>
     </Contenedor>
   );
