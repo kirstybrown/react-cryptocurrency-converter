@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import useCurrency from "./hooks/useCurrency";
 
 const Button = styled.input`
     margin-top: 20px;
@@ -20,9 +21,21 @@ const Button = styled.input`
 `;
 
 const Form = () => {
+
+    const CURRENCIES = [
+        {code: 'USD', name: 'US Dollars'},
+        {code: 'MXN', name: 'Mexican Pesos'},
+        {code: 'EUR', name: 'Euros'},
+        {code: 'GBP', name: 'British Pounds'}
+    ]
+
+    // Use useCurrency
+    const [currency, SelectCurrency] = useCurrency('Choose your currency', '', CURRENCIES);
+
     return (
         <form>
 
+            <SelectCurrency/>
 
             <Button
                 type="submit"
