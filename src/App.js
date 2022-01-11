@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import imagen from './cryptomonedas.png';
 import Form from './components/Form';
+import Conversion from './components/Conversion';
+import Spinner from "./components/Spinner";
 
 const Contenedor = styled.div`
   max-width: 900px;
@@ -41,6 +43,8 @@ function App() {
 
   const [currency, saveCurrency] = useState('');
   const [cryptocurrency, saveCryptocurrency] = useState('');
+  const [result, saveResult] = useState({});
+  const [loading, saveLoading] = useState(false);
 
   useEffect(() => {
 
@@ -53,11 +57,28 @@ function App() {
       const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptocurrency}&tsyms=${currency}`;
 
       const result = await axios.get(url);
-      console.log(result.data.DISPLAY[cryptocurrency][currency] );
+
+      // Show spinner
+      saveLoading(true);
+
+      // Hide spinner and show reulst
+      setTimeout(() => {
+
+        // change state of loading
+        saveLoading(false);
+
+        // save conversion
+        saveResult(result.data.DISPLAY[cryptocurrency][currency] );
+      }, 3000);
+
+      
     }
     convertCryptocurrency();
 
   }, [currency, cryptocurrency]);
+
+  // Show spinner or result
+  const component = (loading) ? <Spinner /> : <Conversion result={result} />
 
   return (
     <Contenedor>
@@ -74,6 +95,8 @@ function App() {
           saveCurrency={saveCurrency}
           saveCryptocurrency={saveCryptocurrency}
         />
+
+        {component}
       </div>
     </Contenedor>
   );
